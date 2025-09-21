@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_subdirectory(myers)
 
-add_executable(test_app apps/main.cpp)
-target_link_libraries(test_app  PRIVATE myers)
+add_executable(myapp apps/main.cpp)
+target_link_libraries(myapp  PRIVATE myers)
