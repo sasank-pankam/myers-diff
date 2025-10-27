@@ -1,3 +1,5 @@
+test_txt*.txt
+
 # Prerequisites
 *.d
 

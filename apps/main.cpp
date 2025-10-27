@@ -2,33 +2,28 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <unistd.h>
 #include <vector>
 #include "myers/diff.h"
+#include "utils.h"
 
 template<typename T>
-class VectorWrapper : public myers::DataView<T> {
-        const std::vector<T> m_vec;
-
-public:
-        explicit VectorWrapper(const std::vector<T> &vec) : m_vec(vec) {}
-
-        T get(size_t idx) const override { return m_vec[idx]; }
-
-        size_t size() const override { return m_vec.size(); };
-};
-
-template<typename T>
-void run_test(const std::string &test_name, const std::vector<T> &a, const std::vector<T> &b, std::ofstream &logger) {
+void run_test(const std::string &test_name, const myers::DataView<T> &a, const myers::DataView<T> &b,
+              std::ofstream &logger) {
         std::cout << test_name << " start\n";
 
         myers::Diff<T> differ;
 
         auto start = std::chrono::high_resolution_clock::now();
-        VectorWrapper<T> a_w(a), b_w(b);
-        auto edits = differ.diff(a_w, b_w);
+        auto edits = differ.diff(a, b);
         auto end = std::chrono::high_resolution_clock::now();
 
         auto duration = duration_cast<std::chrono::microseconds>(end - start).count();
+
+        std::cout << test_name << " edits lenght: " << edits.size() << "\n";
+        for (auto &e: edits) {
+                std::cout << e << "\n";
+        }
 
         if (logger.is_open()) {
                 logger << test_name << ": " << duration << " µs\n";
@@ -36,9 +31,9 @@ void run_test(const std::string &test_name, const std::vector<T> &a, const std::
 
         std::cout << test_name << " end (" << duration << " µs)\n";
 }
+const std::string log_file = "diff_benchmarks.log";
 
 void test_diff_vector() {
-        std::string log_file = "diff_benchmarks.log";
         std::ofstream logger(log_file, std::ofstream::app);
 
         logger << "Naive impl\n";
@@ -51,8 +46,9 @@ void test_diff_vector() {
                                  "CABACABBAACACBABACABACABBACABA"
                                  "CABACABBAACACBBACABACABBCABACA"
                                  "CABACABBAACACBBACABACABBCABACA";
-                std::vector<char> a(s1.begin(), s1.end());
-                std::vector<char> b(s2.begin(), s2.end());
+                VectorWrapper a(std::vector<char>{s1.begin(), s1.end()});
+                VectorWrapper b(std::vector<char>{s2.begin(), s2.end()});
+
                 run_test("Chars test", a, b, logger);
         }
         {
@@ -65,7 +61,9 @@ void test_diff_vector() {
                                 b.push_back("line" + std::to_string(i));
                         }
                 }
-                run_test("String test", a, b, logger);
+                VectorWrapper a_t(a);
+                VectorWrapper b_t(b);
+                run_test("String test", a_t, b_t, logger);
         }
         {
                 std::vector<int> a, b;
@@ -74,12 +72,23 @@ void test_diff_vector() {
                         b.push_back(i * 2);
                 }
 
-                run_test("Int test", a, b, logger);
+                VectorWrapper a_t(a);
+                VectorWrapper b_t(b);
+                run_test("Int test", a_t, b_t, logger);
         }
+}
 
+void test_files() {
+        std::ifstream f1("test_txt_1.txt", std::ifstream::in), f2("test_txt_2.txt", std::ifstream::in);
+        std::ofstream logger(log_file, std::ofstream::app);
+
+        StreamWrapper s1(f1), s2(f2);
+        run_test("File test", s1, s2, logger);
 }
 
 int main() {
-        test_diff_vector();
+        // test_diff_vector();
+        test_files();
+
         return 0;
 }
