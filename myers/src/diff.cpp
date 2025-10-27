@@ -12,9 +12,9 @@
 #include "myers/utils.h"
 
 template<typename T>
-std::vector<NegIndVector<int>> myers::Diff<T>::shortest_edit_path(const std::vector<T> &a,
-    const std::vector<T> &b) {
-    if (a.empty() && b.empty()) {
+std::vector<NegIndVector<int>> myers::Diff<T>::shortest_edit_path(const DataView<T> &a,
+    const DataView<T> &b) {
+    if (!a.size() and !b.size()) {
         return {};
     }
 
@@ -38,7 +38,7 @@ std::vector<NegIndVector<int>> myers::Diff<T>::shortest_edit_path(const std::vec
             }
 
             int y = x - k;
-            while (x < n && y < m && this->comp_(a[x], b[y])) {
+            while (x < n && y < m && this->comp_(a.get(x), b.get(y))) {
                 ++x; ++y;
             }
 
@@ -53,8 +53,8 @@ std::vector<NegIndVector<int>> myers::Diff<T>::shortest_edit_path(const std::vec
 }
 
 template<typename T>
-std::vector<myers::Path> myers::Diff<T>::backtrack(const std::vector<T> &a, const std::vector<T> &b) {
-    int x = a.size(), y = b.size();
+std::vector<myers::Path> myers::Diff<T>::backtrack(const DataView<T> &a, const DataView<T> &b) {
+    size_t x = a.size(), y = b.size();
     std::vector<myers::Path> ret;
     ret.reserve(x + y);
 
@@ -93,20 +93,20 @@ std::vector<myers::Path> myers::Diff<T>::backtrack(const std::vector<T> &a, cons
 }
 
 template<typename T>
-std::vector<typename myers::Edit<T>> myers::Diff<T>::diff(const std::vector<T> &a, const std::vector<T> &b) {
+std::vector<typename myers::Edit<T>> myers::Diff<T>::diff(const DataView<T> &a, const DataView<T> &b) {
     auto paths = backtrack(a, b);
     std::vector<Edit<T>> result_diff;
     result_diff.reserve(paths.size());
 
     for (auto& path : paths) {
         if (path.fr_x == path.to_x) {
-            const T& b_line = b[path.fr_y];
+            const T& b_line = b.get(path.fr_y);
             result_diff.emplace_back(Edit<T>(EditType::Insert, {}, b_line));
         } else if (path.fr_y == path.to_y) {
-            const T& a_line = a[path.fr_x];
+            const T& a_line = a.get(path.fr_x);
             result_diff.emplace_back(Edit<T>(EditType::Delete, a_line, {}));
         } else {
-            const T& a_line = a[path.fr_x];
+            const T& a_line = a.get(path.fr_x);
             result_diff.emplace_back(Edit<T>(EditType::Keep, a_line, a_line));
         }
     }
