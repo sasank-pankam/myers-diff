@@ -8,19 +8,10 @@
 #include <functional>
 #include <vector>
 
-#include "utils.h"
+#include "internal_utils.h"
+#include "interfaces.h"
 
 namespace myers {
-
-        template<typename T>
-        class DataView {
-        public:
-                virtual ~DataView() = default;
-                virtual T get(size_t idx) const = 0;
-                virtual size_t size() const = 0;
-        };
-
-
         enum class EditType { Keep, Insert, Delete };
 
         template<typename T>

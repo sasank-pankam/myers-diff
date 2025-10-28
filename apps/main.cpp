@@ -2,10 +2,10 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <unistd.h>
 #include <vector>
+
 #include "myers/diff.h"
-#include "utils.h"
+#include "myers/utils.h"
 
 template<typename T>
 void run_test(const std::string &test_name, const myers::DataView<T> &a, const myers::DataView<T> &b,
@@ -46,8 +46,8 @@ void test_diff_vector() {
                                  "CABACABBAACACBABACABACABBACABA"
                                  "CABACABBAACACBBACABACABBCABACA"
                                  "CABACABBAACACBBACABACABBCABACA";
-                VectorWrapper a(std::vector<char>{s1.begin(), s1.end()});
-                VectorWrapper b(std::vector<char>{s2.begin(), s2.end()});
+                myers::external::VectorWrapper a(std::vector<char>{s1.begin(), s1.end()});
+                myers::external::VectorWrapper b(std::vector<char>{s2.begin(), s2.end()});
 
                 run_test("Chars test", a, b, logger);
         }
@@ -61,8 +61,8 @@ void test_diff_vector() {
                                 b.push_back("line" + std::to_string(i));
                         }
                 }
-                VectorWrapper a_t(a);
-                VectorWrapper b_t(b);
+                myers::external::VectorWrapper a_t(a);
+                myers::external::VectorWrapper b_t(b);
                 run_test("String test", a_t, b_t, logger);
         }
         {
@@ -72,8 +72,8 @@ void test_diff_vector() {
                         b.push_back(i * 2);
                 }
 
-                VectorWrapper a_t(a);
-                VectorWrapper b_t(b);
+                myers::external::VectorWrapper a_t(a);
+                myers::external::VectorWrapper b_t(b);
                 run_test("Int test", a_t, b_t, logger);
         }
 }
@@ -82,7 +82,7 @@ void test_files() {
         std::ifstream f1("test_txt_1.txt", std::ifstream::in), f2("test_txt_2.txt", std::ifstream::in);
         std::ofstream logger(log_file, std::ofstream::app);
 
-        StreamWrapper s1(f1), s2(f2);
+        myers::external::StreamWrapper s1(f1), s2(f2);
         run_test("File test", s1, s2, logger);
 }
 
