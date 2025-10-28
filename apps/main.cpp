@@ -5,14 +5,19 @@
 #include <vector>
 
 #include "myers/diff.h"
+#include "myers/diff_linear.h"
 #include "myers/utils.h"
+
+
+template<typename  T>
+using Differ = myers::DiffLinear<T>;
 
 template<typename T>
 void run_test(const std::string &test_name, const myers::DataView<T> &a, const myers::DataView<T> &b,
               std::ofstream &logger) {
         std::cout << test_name << " start\n";
 
-        myers::Diff<T> differ;
+        Differ<T> differ;
 
         auto start = std::chrono::high_resolution_clock::now();
         auto edits = differ.diff(a, b);

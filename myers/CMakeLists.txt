@@ -5,6 +5,9 @@ add_library(myers
         include/myers/utils.h
         include/myers/interfaces.h
         include/myers/internal_utils.h
+        src/myers_linear.cpp
+        include/myers/diff_linear.h
+        include/myers/common.h
 )
 
 target_include_directories(myers
