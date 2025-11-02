@@ -51,6 +51,16 @@ namespace myers {
                 os << "(" << p.fr_x << ", " << p.fr_y << ") -> (" << p.to_x << ", " << p.to_y << ")";
                 return os;
         }
-}
+
+
+        template<typename T>
+        class DataView {
+        public:
+                virtual ~DataView() = default;
+                virtual T get(size_t idx) const = 0;
+                virtual size_t size() const = 0;
+        };
+
+} // namespace myers
 
 #endif // MYERS_DIFF_COMMON_H

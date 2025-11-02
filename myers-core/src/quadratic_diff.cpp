@@ -3,7 +3,7 @@
 //
 
 
-#include "myers/diff.h"
+#include "myers/quadratic_diff.h"
 
 #include <ostream>
 #include <string>
@@ -11,7 +11,7 @@
 
 namespace myers {
         template<typename T>
-        auto Diff<T>::shortest_edit_path(const DataView<T> &a, const DataView<T> &b) -> std::vector<NegIndVector<int>> {
+        auto QuadraticDiff<T>::shortest_edit_path(const DataView<T> &a, const DataView<T> &b) -> std::vector<detail::NegIndVector<int>> {
 
 
                 if (!a.size() and !b.size()) {
@@ -21,8 +21,8 @@ namespace myers {
                 size_t n = a.size(), m = b.size();
                 int max = n + m; // TODO: check overflow
 
-                NegIndVector<int> v(2 * max + 1, -1);
-                std::vector<NegIndVector<int>> state;
+                detail::NegIndVector<int> v(2 * max + 1, -1);
+                std::vector<detail::NegIndVector<int>> state;
                 state.reserve(max + 1);
                 v[1] = 0;
 
@@ -54,7 +54,7 @@ namespace myers {
         }
 
         template<typename T>
-        std::vector<Path> Diff<T>::backtrack(const DataView<T> &a, const DataView<T> &b) {
+        std::vector<Path> QuadraticDiff<T>::backtrack(const DataView<T> &a, const DataView<T> &b) {
                 size_t x = a.size(), y = b.size();
                 std::vector<Path> ret;
                 ret.reserve(x + y);
@@ -95,7 +95,7 @@ namespace myers {
         }
 
         template<typename T>
-        std::vector<Edit<T>> Diff<T>::diff(const DataView<T> &a, const DataView<T> &b) {
+        std::vector<Edit<T>> QuadraticDiff<T>::diff(const DataView<T> &a, const DataView<T> &b) {
                 auto paths = backtrack(a, b);
                 std::vector<Edit<T>> result_diff;
                 result_diff.reserve(paths.size());
@@ -121,6 +121,6 @@ namespace myers {
 
 
 
-template class myers::Diff<std::string>;
-template class myers::Diff<char>;
-template class myers::Diff<int>;
+template class myers::QuadraticDiff<std::string>;
+template class myers::QuadraticDiff<char>;
+template class myers::QuadraticDiff<int>;

@@ -8,7 +8,8 @@
 #ifndef MYERS_DIFF_INTERNAL_UTILS_H
 #define MYERS_DIFF_INTERNAL_UTILS_H
 
-namespace myers {
+
+namespace myers::detail {
 
         template<typename T>
         class NegIndVector : public std::vector<T> {
@@ -58,6 +59,7 @@ namespace myers {
                 os << "]";
                 return os;
         }
-} // namespace myers
+} // namespace myers::detail
+
 
 #endif // MYERS_DIFF_INTERNAL_UTILS_H

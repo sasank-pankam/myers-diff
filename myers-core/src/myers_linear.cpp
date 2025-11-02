@@ -6,12 +6,12 @@
 #include <vector>
 
 #include "myers/internal_utils.h"
-#include "myers/diff_linear.h"
+#include "myers/linear_diff.h"
 
 namespace myers {
 
         template <typename T>
-        std::vector<Edit<T>> DiffLinear<T>::diff(const DataView<T> &a, const DataView<T> &b) {
+        std::vector<Edit<T>> LinearDiffer<T>::diff(const DataView<T> &a, const DataView<T> &b) {
                 std::vector<Edit<T>> out;
                 out.reserve(a.size() + b.size());
                 diff_rec(a, 0, (int) a.size(), b, 0, (int) b.size(), out);
@@ -19,7 +19,7 @@ namespace myers {
         }
 
         template <typename T>
-        std::tuple<int, int, int, int> DiffLinear<T>::middle_snake(const DataView<T> &a, int a_lo, int a_hi,
+        std::tuple<int, int, int, int> LinearDiffer<T>::middle_snake(const DataView<T> &a, int a_lo, int a_hi,
                                                     const DataView<T> &b, int b_lo, int b_hi) {
                 int N = a_hi - a_lo;
                 int M = b_hi - b_lo;
@@ -32,8 +32,8 @@ namespace myers {
                 int maxD = (N + M + 1) / 2;
                 int offset = maxD;
 
-                NegIndVector<int> vf(2 * maxD + 1, -1);
-                NegIndVector<int> vb(2 * maxD + 1, -1);
+                detail::NegIndVector<int> vf(2 * maxD + 1, -1);
+                detail::NegIndVector<int> vb(2 * maxD + 1, -1);
 
                 vf[1] = 0;
                 vb[1] = 0;
@@ -151,7 +151,7 @@ namespace myers {
         }
 
         template<typename T>
-        void DiffLinear<T>::diff_rec(const DataView<T> &a, int a_lo, int a_hi, const DataView<T> &b, int b_lo, int b_hi,
+        void LinearDiffer<T>::diff_rec(const DataView<T> &a, int a_lo, int a_hi, const DataView<T> &b, int b_lo, int b_hi,
                       std::vector<Edit<T>> &out) {
 
                 while (a_lo < a_hi && b_lo < b_hi && this->m_comp(a.get(a_lo), b.get(b_lo))) {
@@ -199,6 +199,6 @@ namespace myers {
 
 } // namespace myers
 
-template class myers::DiffLinear<std::string>;
-template class myers::DiffLinear<char>;
-template class myers::DiffLinear<int>;
+template class myers::LinearDiffer<std::string>;
+template class myers::LinearDiffer<char>;
+template class myers::LinearDiffer<int>;

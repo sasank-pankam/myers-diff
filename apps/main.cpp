@@ -4,13 +4,11 @@
 #include <string>
 #include <vector>
 
-#include "myers/diff.h"
-#include "myers/diff_linear.h"
-#include "myers/utils.h"
+#include "myers/quadratic_diff.h"
+#include "myers-utils/input.h"
 
-
-template<typename  T>
-using Differ = myers::DiffLinear<T>;
+template<typename T>
+using Differ = myers::QuadraticDiff<T>;
 
 template<typename T>
 void run_test(const std::string &test_name, const myers::DataView<T> &a, const myers::DataView<T> &b,
@@ -51,8 +49,9 @@ void test_diff_vector() {
                                  "CABACABBAACACBABACABACABBACABA"
                                  "CABACABBAACACBBACABACABBCABACA"
                                  "CABACABBAACACBBACABACABBCABACA";
-                myers::external::VectorWrapper a(std::vector<char>{s1.begin(), s1.end()});
-                myers::external::VectorWrapper b(std::vector<char>{s2.begin(), s2.end()});
+                myers::utils::VectorWrapper a(std::vector<char>{s1.begin(), s1.end()});
+
+                myers::utils::VectorWrapper b(std::vector<char>{s2.begin(), s2.end()});
 
                 run_test("Chars test", a, b, logger);
         }
@@ -66,8 +65,8 @@ void test_diff_vector() {
                                 b.push_back("line" + std::to_string(i));
                         }
                 }
-                myers::external::VectorWrapper a_t(a);
-                myers::external::VectorWrapper b_t(b);
+                myers::utils::VectorWrapper a_t(a);
+                myers::utils::VectorWrapper b_t(b);
                 run_test("String test", a_t, b_t, logger);
         }
         {
@@ -77,8 +76,8 @@ void test_diff_vector() {
                         b.push_back(i * 2);
                 }
 
-                myers::external::VectorWrapper a_t(a);
-                myers::external::VectorWrapper b_t(b);
+                myers::utils::VectorWrapper a_t(a);
+                myers::utils::VectorWrapper b_t(b);
                 run_test("Int test", a_t, b_t, logger);
         }
 }
@@ -87,7 +86,7 @@ void test_files() {
         std::ifstream f1("test_txt_1.txt", std::ifstream::in), f2("test_txt_2.txt", std::ifstream::in);
         std::ofstream logger(log_file, std::ofstream::app);
 
-        myers::external::StreamWrapper s1(f1), s2(f2);
+        myers::utils::StreamWrapper s1(f1), s2(f2);
         run_test("File test", s1, s2, logger);
 }
 

@@ -3,9 +3,8 @@
 //
 
 
-
-#include "common.h"
-#include "interfaces.h"
+#include "differ.h"
+#include "types.h"
 
 #ifndef MYERS_DIFF_DIFF_LINEAR_H
 #define MYERS_DIFF_DIFF_LINEAR_H
@@ -14,7 +13,7 @@
 namespace myers {
 
         template<typename T>
-        class DiffLinear : public BaseDiff<T> {
+        class LinearDiffer : public BaseDiffer<T> {
 
         std::tuple<int,int,int,int> middle_snake(
                    const DataView<T>& a, int a_lo, int a_hi,
