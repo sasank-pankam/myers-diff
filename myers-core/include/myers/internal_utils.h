@@ -13,24 +13,23 @@ namespace myers::detail {
 
         template<typename T>
         class NegIndVector : public std::vector<T> {
-
                 int wrap(int i) const { return i < 0 ? i + (int) this->size() : i; }
 
                 using Base = std::vector<T>;
 
-        public:
+            public:
                 using Base::Base;
 
-                T &operator[](int idx) {
+                T& operator[](int idx) {
                         // convert the index to a wrappable -ve index
                         return Base::operator[](wrap(idx));
                 }
 
-                const T &operator[](int idx) const { return Base::operator[](wrap(idx)); }
+                const T& operator[](int idx) const { return Base::operator[](wrap(idx)); }
         };
 
         template<typename T>
-        inline std::ostream &operator<<(std::ostream &os, const NegIndVector<T> &v) {
+        inline std::ostream& operator<<(std::ostream& os, const NegIndVector<T>& v) {
                 os << "[";
                 for (int i = 0; i < v.size(); ++i) {
                         os << v[i];
@@ -42,7 +41,7 @@ namespace myers::detail {
                 return os;
         }
 
-        inline std::ostream &operator<<(std::ostream &os, const NegIndVector<int> &v) {
+        inline std::ostream& operator<<(std::ostream& os, const NegIndVector<int>& v) {
                 os << "[";
                 for (int i = 0; i < v.size(); ++i) {
                         auto val = v[i];
@@ -59,7 +58,7 @@ namespace myers::detail {
                 os << "]";
                 return os;
         }
-} // namespace myers::detail
+}  // namespace myers::detail
 
 
-#endif // MYERS_DIFF_INTERNAL_UTILS_H
+#endif  // MYERS_DIFF_INTERNAL_UTILS_H

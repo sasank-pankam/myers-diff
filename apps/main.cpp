@@ -4,15 +4,15 @@
 #include <string>
 #include <vector>
 
-#include "myers/quadratic_diff.h"
 #include "myers-utils/input.h"
+#include "myers/quadratic_diff.h"
 
 template<typename T>
 using Differ = myers::QuadraticDiff<T>;
 
 template<typename T>
-void run_test(const std::string &test_name, const myers::DataView<T> &a, const myers::DataView<T> &b,
-              std::ofstream &logger) {
+void run_test(const std::string& test_name, const myers::DataView<T>& a, const myers::DataView<T>& b,
+              std::ofstream& logger) {
         std::cout << test_name << " start\n";
 
         Differ<T> differ;
@@ -24,7 +24,7 @@ void run_test(const std::string &test_name, const myers::DataView<T> &a, const m
         auto duration = duration_cast<std::chrono::microseconds>(end - start).count();
 
         std::cout << test_name << " edits lenght: " << edits.size() << "\n";
-        for (auto &e: edits) {
+        for (auto& e: edits) {
                 std::cout << e << "\n";
         }
 
@@ -41,14 +41,16 @@ void test_diff_vector() {
 
         logger << "Naive impl\n";
         {
-                std::string s1 = "ABCABBAACBACABACABBAACABBCABAC"
-                                 "ABCACBBACABACABBAACBACABACABBC"
-                                 "ABACABCABBAACBACABACABBCABACAB"
-                                 "ACABCABBAACBACABACABBCABACABAC";
-                std::string s2 = "CBABACABACABBACABACABBACACBBA"
-                                 "CABACABBAACACBABACABACABBACABA"
-                                 "CABACABBAACACBBACABACABBCABACA"
-                                 "CABACABBAACACBBACABACABBCABACA";
+                std::string s1 =
+                        "ABCABBAACBACABACABBAACABBCABAC"
+                        "ABCACBBACABACABBAACBACABACABBC"
+                        "ABACABCABBAACBACABACABBCABACAB"
+                        "ACABCABBAACBACABACABBCABACABAC";
+                std::string s2 =
+                        "CBABACABACABBACABACABBACACBBA"
+                        "CABACABBAACACBABACABACABBACABA"
+                        "CABACABBAACACBBACABACABBCABACA"
+                        "CABACABBAACACBBACABACABBCABACA";
                 myers::utils::VectorWrapper a(std::vector<char>{s1.begin(), s1.end()});
 
                 myers::utils::VectorWrapper b(std::vector<char>{s2.begin(), s2.end()});
@@ -60,7 +62,7 @@ void test_diff_vector() {
                 for (int i = 0; i < 220; ++i) {
                         a.push_back("line" + std::to_string(i));
                         if (i % 10 == 0) {
-                                b.push_back("lineZ" + std::to_string(i)); // mismatch every 10th
+                                b.push_back("lineZ" + std::to_string(i));  // mismatch every 10th
                         } else {
                                 b.push_back("line" + std::to_string(i));
                         }

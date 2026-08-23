@@ -3,6 +3,7 @@
 //
 
 #include <functional>
+
 #include "types.h"
 
 #ifndef MYERS_DIFF_DIFFER_H
@@ -12,15 +13,16 @@
 namespace myers {
         template<typename T>
         class BaseDiffer {
-        protected:
-                using Comparator = std::function<bool(const T &, const T &)>;
+            protected:
+                using Comparator = std::function<bool(const T&, const T&)>;
                 Comparator m_comp;
-        public:
+
+            public:
                 virtual ~BaseDiffer() = default;
                 explicit BaseDiffer(Comparator comp = std::equal_to<T>()) : m_comp(comp) {}
 
-                virtual std::vector<Edit<T>> diff(const DataView<T> &a, const DataView<T> &b) = 0;
+                virtual std::vector<Edit<T>> diff(const DataView<T>& a, const DataView<T>& b) = 0;
         };
-}
+}  // namespace myers
 
-#endif // MYERS_DIFF_DIFFER_H
+#endif  // MYERS_DIFF_DIFFER_H

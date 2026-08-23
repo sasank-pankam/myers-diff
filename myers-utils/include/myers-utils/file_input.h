@@ -13,12 +13,11 @@
 namespace myers::utils {
 
         class StreamWrapper : public DataView<std::string> {
-                std::ifstream &m_stream;
-                std::vector<uint64_t> m_offsets{}; // offset
+                std::ifstream& m_stream;
+                std::vector<uint64_t> m_offsets{};  // offset
 
                 void build() {
-                        if (!m_stream)
-                                return;
+                        if (!m_stream) return;
 
                         m_offsets.clear();
                         std::string line;
@@ -37,11 +36,11 @@ namespace myers::utils {
                 }
 
 
-        public:
-                explicit StreamWrapper(std::ifstream &stream) : m_stream(stream), m_offsets(std::vector<uint64_t>{}) {
+            public:
+                explicit StreamWrapper(std::ifstream& stream) : m_stream(stream), m_offsets(std::vector<uint64_t>{}) {
                         build();
                 }
-                explicit StreamWrapper(std::ifstream &&stream) : m_stream(stream), m_offsets(std::vector<uint64_t>{}) {
+                explicit StreamWrapper(std::ifstream&& stream) : m_stream(stream), m_offsets(std::vector<uint64_t>{}) {
                         build();
                 }
 
@@ -59,7 +58,7 @@ namespace myers::utils {
                 ~StreamWrapper() override { m_stream.close(); }
         };
 
-} // namespace myers::utils
+}  // namespace myers::utils
 
 
-#endif // MYERS_DIFF_FILE_INPUT_H
+#endif  // MYERS_DIFF_FILE_INPUT_H

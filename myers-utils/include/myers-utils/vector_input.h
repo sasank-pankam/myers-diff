@@ -13,15 +13,15 @@ namespace myers::utils {
         class VectorWrapper : public DataView<T> {
                 const std::vector<T> m_vec{};
 
-        public:
-                explicit VectorWrapper(const std::vector<T> &&vec) : m_vec(vec) {}
-                explicit VectorWrapper(const std::vector<T> &vec) : m_vec(vec) {}
+            public:
+                explicit VectorWrapper(const std::vector<T>&& vec) : m_vec(vec) {}
+                explicit VectorWrapper(const std::vector<T>& vec) : m_vec(vec) {}
 
                 T get(size_t idx) const override { return m_vec[idx]; }
 
                 [[nodiscard]] size_t size() const override { return m_vec.size(); };
         };
-} // namespace myers::utils
+}  // namespace myers::utils
 
 
-#endif // MYERS_DIFF_VECTOR_INPUT_H
+#endif  // MYERS_DIFF_VECTOR_INPUT_H

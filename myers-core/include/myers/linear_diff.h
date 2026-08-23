@@ -14,18 +14,16 @@ namespace myers {
 
         template<typename T>
         class LinearDiffer : public BaseDiffer<T> {
+                std::tuple<int, int, int, int> middle_snake(const DataView<T>& a, int a_lo, int a_hi,
+                                                            const DataView<T>& b, int b_lo, int b_hi);
 
-        std::tuple<int,int,int,int> middle_snake(
-                   const DataView<T>& a, int a_lo, int a_hi,
-                   const DataView<T>& b, int b_lo, int b_hi);
+                void diff_rec(const DataView<T>& a, int a_lo, int a_hi, const DataView<T>& b, int b_lo, int b_hi,
+                              std::vector<Edit<T>>& out);
 
-        void diff_rec(const DataView<T>& a, int a_lo, int a_hi,
-                     const DataView<T>& b, int b_lo, int b_hi,
-                     std::vector<Edit<T>>& out);
-        public:
-                std::vector<Edit<T>> diff(const DataView<T> &a, const DataView<T> &b) override;
+            public:
+                std::vector<Edit<T>> diff(const DataView<T>& a, const DataView<T>& b) override;
         };
 
-} // namespace myers
+}  // namespace myers
 
-#endif // MYERS_DIFF_DIFF_LINEAR_H
+#endif  // MYERS_DIFF_DIFF_LINEAR_H

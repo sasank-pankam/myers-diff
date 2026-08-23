@@ -24,7 +24,7 @@ namespace myers {
         };
 
         template<typename T>
-        std::ostream &operator<<(std::ostream &os, const Edit<T> &e) {
+        std::ostream& operator<<(std::ostream& os, const Edit<T>& e) {
                 switch (e.type) {
                         case EditType::Keep:
                                 os << "     " << (e.new_value ? e.new_value.value() : T{});
@@ -40,14 +40,14 @@ namespace myers {
         }
 
         class Path {
-        public:
+            public:
                 int fr_x, fr_y;
                 int to_x, to_y;
 
                 Path(int fr_x, int fr_y, int to_x, int to_y) : fr_x(fr_x), fr_y(fr_y), to_x(to_x), to_y(to_y) {};
         };
 
-        inline std::ostream &operator<<(std::ostream &os, const Path &p) {
+        inline std::ostream& operator<<(std::ostream& os, const Path& p) {
                 os << "(" << p.fr_x << ", " << p.fr_y << ") -> (" << p.to_x << ", " << p.to_y << ")";
                 return os;
         }
@@ -55,12 +55,12 @@ namespace myers {
 
         template<typename T>
         class DataView {
-        public:
+            public:
                 virtual ~DataView() = default;
                 virtual T get(size_t idx) const = 0;
                 virtual size_t size() const = 0;
         };
 
-} // namespace myers
+}  // namespace myers
 
-#endif // MYERS_DIFF_COMMON_H
+#endif  // MYERS_DIFF_COMMON_H

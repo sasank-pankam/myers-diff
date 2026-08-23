@@ -11,15 +11,14 @@
 
 namespace myers {
         template<typename T>
-        auto QuadraticDiff<T>::shortest_edit_path(const DataView<T> &a, const DataView<T> &b) -> std::vector<detail::NegIndVector<int>> {
-
-
+        auto QuadraticDiff<T>::shortest_edit_path(const DataView<T>& a, const DataView<T>& b)
+                -> std::vector<detail::NegIndVector<int>> {
                 if (!a.size() and !b.size()) {
                         return {};
                 }
 
                 size_t n = a.size(), m = b.size();
-                int max = n + m; // TODO: check overflow
+                int max = n + m;  // TODO: check overflow
 
                 detail::NegIndVector<int> v(2 * max + 1, -1);
                 std::vector<detail::NegIndVector<int>> state;
@@ -27,7 +26,7 @@ namespace myers {
                 v[1] = 0;
 
                 for (int d = 0; d <= max; ++d) {
-                        state.push_back(v); // copy
+                        state.push_back(v);  // copy
 
                         for (int k = -d; k <= d; k += 2) {
                                 int x;
@@ -45,7 +44,7 @@ namespace myers {
 
                                 v[k] = x;
                                 if (x >= n && y >= m) {
-                                        state.resize(d + 1); // release unnecessary allocated space.
+                                        state.resize(d + 1);  // release unnecessary allocated space.
                                         return state;
                                 }
                         }
@@ -54,7 +53,7 @@ namespace myers {
         }
 
         template<typename T>
-        std::vector<Path> QuadraticDiff<T>::backtrack(const DataView<T> &a, const DataView<T> &b) {
+        std::vector<Path> QuadraticDiff<T>::backtrack(const DataView<T>& a, const DataView<T>& b) {
                 size_t x = a.size(), y = b.size();
                 std::vector<Path> ret;
                 ret.reserve(x + y);
@@ -67,7 +66,7 @@ namespace myers {
                 for (int d = (int) shortest_path.size() - 1; d >= 0; --d) {
                         int k = x - y;
                         int prev_k;
-                        auto &v = shortest_path[d];
+                        auto& v = shortest_path[d];
 
                         if (k == -d || (k != d && v[k - 1] < v[k + 1])) {
                                 prev_k = k + 1;
@@ -84,8 +83,7 @@ namespace myers {
                                 --y;
                         }
 
-                        if (d > 0)
-                                ret.emplace_back(Path(prev_x, prev_y, x, y));
+                        if (d > 0) ret.emplace_back(Path(prev_x, prev_y, x, y));
 
                         x = prev_x;
                         y = prev_y;
@@ -95,20 +93,20 @@ namespace myers {
         }
 
         template<typename T>
-        std::vector<Edit<T>> QuadraticDiff<T>::diff(const DataView<T> &a, const DataView<T> &b) {
+        std::vector<Edit<T>> QuadraticDiff<T>::diff(const DataView<T>& a, const DataView<T>& b) {
                 auto paths = backtrack(a, b);
                 std::vector<Edit<T>> result_diff;
                 result_diff.reserve(paths.size());
 
-                for (auto &path: paths) {
+                for (auto& path: paths) {
                         if (path.fr_x == path.to_x) {
-                                const T &b_line = b.get(path.fr_y);
+                                const T& b_line = b.get(path.fr_y);
                                 result_diff.emplace_back(Edit<T>(EditType::Insert, {}, b_line));
                         } else if (path.fr_y == path.to_y) {
-                                const T &a_line = a.get(path.fr_x);
+                                const T& a_line = a.get(path.fr_x);
                                 result_diff.emplace_back(Edit<T>(EditType::Delete, a_line, {}));
                         } else {
-                                const T &a_line = a.get(path.fr_x);
+                                const T& a_line = a.get(path.fr_x);
                                 result_diff.emplace_back(Edit<T>(EditType::Keep, a_line, a_line));
                         }
                 }
@@ -117,8 +115,7 @@ namespace myers {
                 return result_diff;
         }
 
-}
-
+}  // namespace myers
 
 
 template class myers::QuadraticDiff<std::string>;

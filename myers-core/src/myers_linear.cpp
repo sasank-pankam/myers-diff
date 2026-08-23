@@ -10,17 +10,17 @@
 
 namespace myers {
 
-        template <typename T>
-        std::vector<Edit<T>> LinearDiffer<T>::diff(const DataView<T> &a, const DataView<T> &b) {
+        template<typename T>
+        std::vector<Edit<T>> LinearDiffer<T>::diff(const DataView<T>& a, const DataView<T>& b) {
                 std::vector<Edit<T>> out;
                 out.reserve(a.size() + b.size());
                 diff_rec(a, 0, (int) a.size(), b, 0, (int) b.size(), out);
                 return out;
         }
 
-        template <typename T>
-        std::tuple<int, int, int, int> LinearDiffer<T>::middle_snake(const DataView<T> &a, int a_lo, int a_hi,
-                                                    const DataView<T> &b, int b_lo, int b_hi) {
+        template<typename T>
+        std::tuple<int, int, int, int> LinearDiffer<T>::middle_snake(const DataView<T>& a, int a_lo, int a_hi,
+                                                                     const DataView<T>& b, int b_lo, int b_hi) {
                 int N = a_hi - a_lo;
                 int M = b_hi - b_lo;
 
@@ -74,7 +74,8 @@ namespace myers {
                                                         int x0 = x_meet;
                                                         int y0 = y_meet;
                                                         while (x0 > 0 && y0 > 0 &&
-                                                               this->m_comp(a.get(a_lo + x0 - 1), b.get(b_lo + y0 - 1))) {
+                                                               this->m_comp(a.get(a_lo + x0 - 1),
+                                                                            b.get(b_lo + y0 - 1))) {
                                                                 --x0;
                                                                 --y0;
                                                         }
@@ -125,7 +126,8 @@ namespace myers {
                                                         int x0 = x_meet;
                                                         int y0 = y_meet;
                                                         while (x0 > 0 && y0 > 0 &&
-                                                               this->m_comp(a.get(a_lo + x0 - 1), b.get(b_lo + y0 - 1))) {
+                                                               this->m_comp(a.get(a_lo + x0 - 1),
+                                                                            b.get(b_lo + y0 - 1))) {
                                                                 --x0;
                                                                 --y0;
                                                         }
@@ -151,9 +153,8 @@ namespace myers {
         }
 
         template<typename T>
-        void LinearDiffer<T>::diff_rec(const DataView<T> &a, int a_lo, int a_hi, const DataView<T> &b, int b_lo, int b_hi,
-                      std::vector<Edit<T>> &out) {
-
+        void LinearDiffer<T>::diff_rec(const DataView<T>& a, int a_lo, int a_hi, const DataView<T>& b, int b_lo,
+                                       int b_hi, std::vector<Edit<T>>& out) {
                 while (a_lo < a_hi && b_lo < b_hi && this->m_comp(a.get(a_lo), b.get(b_lo))) {
                         out.emplace_back(Edit<T>(EditType::Keep, a.get(a_lo), b.get(b_lo)));
                         ++a_lo;
@@ -181,10 +182,8 @@ namespace myers {
                 auto [sx, sy, ex, ey] = middle_snake(a, a_lo, a_hi, b, b_lo, b_hi);
 
                 if (sx == ex && sy == ey) {
-                        for (int i = a_lo; i < a_hi; ++i)
-                                out.emplace_back(Edit<T>(EditType::Delete, a.get(i), {}));
-                        for (int j = b_lo; j < b_hi; ++j)
-                                out.emplace_back(Edit<T>(EditType::Insert, {}, b.get(j)));
+                        for (int i = a_lo; i < a_hi; ++i) out.emplace_back(Edit<T>(EditType::Delete, a.get(i), {}));
+                        for (int j = b_lo; j < b_hi; ++j) out.emplace_back(Edit<T>(EditType::Insert, {}, b.get(j)));
                         return;
                 }
 
@@ -197,7 +196,7 @@ namespace myers {
                 diff_rec(a, ex, a_hi, b, ey, b_hi, out);
         }
 
-} // namespace myers
+}  // namespace myers
 
 template class myers::LinearDiffer<std::string>;
 template class myers::LinearDiffer<char>;
