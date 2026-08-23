@@ -1,6 +1,9 @@
 #include <chrono>
+#include <cstring>
 #include <fstream>
 #include <iostream>
+#include <iterator>
+#include <ostream>
 #include <string>
 #include <vector>
 
@@ -92,9 +95,24 @@ void test_files() {
         run_test("File test", s1, s2, logger);
 }
 
-int main() {
-        // test_diff_vector();
-        test_files();
+int main(int argc, char* argv[]) {
+        unsigned char option = 0;
+
+        if (argc >= 2 && strlen(argv[1]) == 1) {
+                option = argv[1][0];
+        }
+
+        switch (option) {
+                case '1':
+                        test_diff_vector();
+                        break;
+                case '0':
+                        test_files();
+                        break;
+                default:
+                        std::cout << "Mode not found.";
+                        break;
+        }
 
         return 0;
 }
