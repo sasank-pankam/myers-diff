@@ -2,11 +2,12 @@
 // Created by sasank on 9/19/25.
 //
 
-
 #include "myers/quadratic_diff.h"
 
-#include <ostream>
+#include <algorithm>
+#include <cstddef>
 #include <string>
+#include <vector>
 
 
 namespace myers {
@@ -78,12 +79,12 @@ namespace myers {
                         int prev_y = prev_x - prev_k;
 
                         while (x > prev_x && y > prev_y) {
-                                ret.emplace_back(Path(x - 1, y - 1, x, y));
+                                ret.emplace_back(x - 1, y - 1, x, y);
                                 --x;
                                 --y;
                         }
 
-                        if (d > 0) ret.emplace_back(Path(prev_x, prev_y, x, y));
+                        if (d > 0) ret.emplace_back(prev_x, prev_y, x, y);
 
                         x = prev_x;
                         y = prev_y;

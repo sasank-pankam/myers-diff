@@ -3,6 +3,8 @@
 //
 
 
+#include <string>
+#include <tuple>
 #include <vector>
 
 #include "myers/internal_utils.h"
