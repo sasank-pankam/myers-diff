@@ -1,3 +1,4 @@
+bazel-*
 notes.txt
 
 test_txt*.txt
@@ -130,3 +131,8 @@ http-client.private.env.json
 # Apifox Helper cache
 .idea/.cache/.Apifox_Helper
 .idea/ApifoxUploaderProjectSetting.xml
+
+compile_commands.json
+.cache/
+external
+MODULE.bazel.lock

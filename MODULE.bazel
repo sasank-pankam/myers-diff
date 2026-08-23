@@ -1,0 +1,19 @@
+module(
+    name = "myers_diff",
+    version = "1.0.0",
+)
+
+
+bazel_dep(name = "gazelle", version = "0.42.0")
+bazel_dep(name = "gazelle_cc", version = "0.1.0")
+
+bazel_dep(name = "rules_cc", version = "0.1.1")
+
+# Hedron's Compile Commands Extractor for Bazel
+# https://github.com/hedronvision/bazel-compile-commands-extractor
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    remote = "https://github.com/helly25/bazel-compile-commands-extractor.git", # this has the fix for the native.py_binary issue.
+    commit = "85d83bc1ee3ab8034d9c40f6900a0753688068b6",
+)
